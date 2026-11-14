@@ -44,7 +44,6 @@ public class Pbkdf2PasswordEncoder implements PasswordEncoder {
 
             byte[] hashCalculado = calcularHash(rawPassword.toString().toCharArray(), salAlmacenada);
 
-
             return MessageDigest.isEqual(hashAlmacenado, hashCalculado);
         } catch (Exception e) {
             return false;
