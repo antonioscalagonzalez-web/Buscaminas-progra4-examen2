@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscaminas Web</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+<header class="topbar">
+    <div class="brand">💣 Buscaminas</div>
+
+    <nav class="nav-links">
+        <button id="nav-juego" class="nav-btn active">Jugar</button>
+        <button id="nav-ranking" class="nav-btn">Ranking</button>
+        <button id="nav-historial" class="nav-btn hidden">Historial</button>
+        <button id="nav-admin" class="nav-btn hidden">Admin</button>
+    </nav>
+
+    <div class="auth-area">
+        <span id="user-badge" class="badge hidden"></span>
+        <button id="btn-abrir-auth" class="btn btn-primary">Iniciar Sesión</button>
+        <button id="btn-logout" class="btn btn-outline hidden">Salir</button>
+    </div>
+</header>
+
+<main class="container">
+    <div id="alerta" class="alerta hidden"></div>
+
+    <section id="vista-auth" class="card auth-card hidden">
+        <div class="auth-tabs">
+            <button id="tab-login" class="tab-btn active">Iniciar Sesión</button>
+            <button id="tab-registro" class="tab-btn">Registrarse</button>
+        </div>
+
+        <form id="form-login" class="form-stack">
+            <label>
+                Usuario o correo electrónico
+                <input type="text" id="login-identificador" required>
+            </label>
+            <label>
+                Contraseña
+                <input type="password" id="login-password" required>
+            </label>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </form>
+
+        <form id="form-registro" class="form-stack hidden">
+            <label>
+                Nombre completo
+                <input type="text" id="reg-nombre" required>
+            </label>
+            <label>
+                Nombre de usuario
+                <input type="text" id="reg-usuario" required>
+            </label>
+            <label>
+                Correo electrónico
+                <input type="email" id="reg-email" required>
+            </label>
+            <label>
+                Contraseña
+                <input type="password" id="reg-password" required>
+            </label>
+            <button type="submit" class="btn btn-primary">Crear Cuenta</button>
+        </form>
+    </section>
+
+    <section id="vista-juego" class="vista">
+        <div id="invitado-banner" class="card hero-card">
+            <h1>Buscaminas Clásico</h1>
+            <p>Inicia sesión o regístrate para jugar, guardar tu historial y competir en el ranking global.</p>
+            <button id="btn-cta-auth" class="btn btn-primary">Comenzar a Jugar</button>
+        </div>
+
+        <div id="panel-juego" class="hidden">
+            <div class="hud-bar">
+                <div class="hud-controls">
+                    <label for="select-nivel">Dificultad:</label>
+                    <select id="select-nivel">
+                        <option value="PRINCIPIANTE">Principiante (9x9 - 10 minas)</option>
+                        <option value="INTERMEDIO">Intermedio (16x16 - 40 minas)</option>
+                        <option value="EXPERTO">Experto (16x30 - 99 minas)</option>
+                    </select>
+                    <button id="btn-nueva-partida" class="btn btn-primary">Nueva Partida</button>
+                    <button id="btn-abandonar" class="btn btn-danger hidden">Abandonar</button>
+                </div>
+
+                <div class="hud-stats">
+                    <div class="stat-box">
+                        <span class="stat-label">BANDERAS</span>
+                        <span id="hud-banderas" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">MOVIMIENTOS</span>
+                        <span id="hud-movimientos" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">TIEMPO</span>
+                        <span id="hud-tiempo" class="stat-value">00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resultado-partida" class="resultado-banner hidden"></div>
+
+            <div class="tablero-wrapper">
+                <div id="tablero" class="tablero-grid"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="vista-ranking" class="vista card hidden">
+        <div class="section-header">
+            <h2>Ranking de Mejores Tiempos</h2>
+            <select id="filtro-ranking-nivel">
+                <option value="">Todos los niveles</option>
+                <option value="PRINCIPIANTE">Principiante</option>
+                <option value="INTERMEDIO">Intermedio</option>
+                <option value="EXPERTO">Experto</option>
+            </select>
+        </div>
+        <table class="tabla-datos">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Jugador</th>
+                <th>Nivel</th>
+                <th>Mejor Tiempo</th>
+                <th>Partidas Ganadas</th>
+                <th>Promedio Movs.</th>
+            </tr>
+            </thead>
+            <tbody id="tbody-ranking"></tbody>
+        </table>
+    </section>
+
+    <section id="vista-historial" class="vista card hidden">
+        <div class="section-header">
+            <h2>Mi Historial de Partidas</h2>
+        </div>
+        <table class="tabla-datos">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nivel</th>
+                <th>Estado</th>
+                <th>Movimientos</th>
+                <th>Tiempo</th>
+                <th>Calificación</th>
+            </tr>
+            </thead>
+            <tbody id="tbody-historial"></tbody>
+        </table>
+    </section>
+
+    <section id="vista-admin" class="vista card hidden">
+        <div class="section-header">
+            <h2>Gestión de Usuarios</h2>
+        </div>
+        <table class="tabla-datos">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+            </thead>
+            <tbody id="tbody-admin"></tbody>
+        </table>
+    </section>
+</main>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>
