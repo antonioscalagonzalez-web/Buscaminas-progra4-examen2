@@ -14,8 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -41,13 +39,14 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity> logout(HttpServletRequest request) {
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
+        if (session == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+        session.invalidate();
         SecurityContextHolder.clearContext();
-        return ResponseEntity.ok(Map.of("mensaje", "Sesión cerrada correctamente"));
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/me")
