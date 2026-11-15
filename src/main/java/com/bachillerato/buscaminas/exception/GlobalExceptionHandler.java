@@ -15,7 +15,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NegocioException.class)
-    public ResponseEntity> manejarNegocio(NegocioException ex) {
+    public ResponseEntity<Object> manejarNegocio(NegocioException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("error", ex.getMessage());
         body.put("timestamp", LocalDateTime.now().toString());
@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity> manejarValidacion(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Object> manejarValidacion(MethodArgumentNotValidException ex) {
         Map<String, String> erroresCampos = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(err ->
                 erroresCampos.put(err.getField(), err.getDefaultMessage())
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(OptimisticLockingFailureException.class)
-    public ResponseEntity> manejarConcurrencia(OptimisticLockingFailureException ex) {
+    public ResponseEntity<Object> manejarConcurrencia(OptimisticLockingFailureException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("error", "La partida fue modificada por otra petición simultánea. Recarga el estado.");
         body.put("timestamp", LocalDateTime.now().toString());
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity> manejarGeneral(Exception ex) {
+    public ResponseEntity<Object> manejarGeneral(Exception ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("error", "Error interno del servidor");
         body.put("timestamp", LocalDateTime.now().toString());
